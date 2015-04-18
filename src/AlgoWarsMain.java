@@ -25,12 +25,12 @@ public class AlgoWarsMain {
 		float maxDifference = Float.MIN_VALUE;
 		AlgoWarsMain biggest = null;
 		for (int x = 0; x<sims; x++){
-			AlgoWarsMain tommy = new AlgoWarsMain(true);
-			averageDifference += tommy.pDifference;
-			if (tommy.pDifference<minDifference) minDifference = tommy.pDifference;
-			if (tommy.pDifference>maxDifference){
-				maxDifference = tommy.pDifference;
-				biggest = tommy;
+			AlgoWarsMain simulation = new AlgoWarsMain(true);
+			averageDifference += simulation.pDifference;
+			if (simulation.pDifference<minDifference) minDifference = simulation.pDifference;
+			if (simulation.pDifference>maxDifference){
+				maxDifference = simulation.pDifference;
+				biggest = simulation;
 			}
 		}
 		averageDifference /= sims;
@@ -70,6 +70,7 @@ public class AlgoWarsMain {
 	
 	
 	public void allocateTasks(){
+		
 		//Set up the initial stacks
 		Collections.sort(tasks);
 		Collections.sort(machines);
@@ -86,19 +87,26 @@ public class AlgoWarsMain {
 		}
 		
 		//refine the results
+		/*
+		 * this currently breaks on random simulated inputs. Trying to figure it out
+		 */
 		Machine.sortStyle = 1;//sort by work load
-		Collections.sort(machines);
-		for (int x = 0; x<machines.size()-2;x++){
-			
-			for (int y = machines.size()-1; y>x; y--){
-				Machine largest = machines.get(x);
-				Machine smallest = machines.get(y);
-				largest.delegateTasks(smallest);
+		boolean tradeFound = true;
+		while (tradeFound){
+			Collections.sort(machines);
+			tradeFound = false;
+
+			//System.out.println(machines.get(0));
+			for (int y = machines.size()-1; y>machines.size()/2; y--){
+				if (machines.get(0).tradeTasks(machines.get(y))){
+					tradeFound = true;
+					break;
+				}
+				
 			}
-			
 		}
 		
-		Machine.sortStyle = 2;//sort by machine number
+		//Machine.sortStyle = 2;//sort by machine number
 		Collections.sort(machines);
 	}
 	
@@ -121,8 +129,8 @@ public class AlgoWarsMain {
 	public void generateRandomInput(){
 
 		Random rand = new Random();
-		int taskCount = rand.nextInt(949)+50;
-		int machineCount = rand.nextInt(49)+1;
+		int taskCount = 1000;//rand.nextInt(949)+50;
+		int machineCount = 50;//rand.nextInt(49)+1;
 		if (machineCount>taskCount){
 			machineCount = taskCount;
 		}
