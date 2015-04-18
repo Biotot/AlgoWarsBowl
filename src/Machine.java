@@ -47,7 +47,13 @@ public class Machine implements Comparable<Machine>{
 				return (arg0.getStrength() - this.strength);
 			case 1:
 				
-				return (int) (arg0.getWorkLoad() -this.workLoad);
+				if (arg0.getWorkLoad() > this.workLoad) return 1;
+				if (arg0.getWorkLoad() < this.workLoad) return -11;
+				else return 0;
+				//this doesn't work and idk why
+				
+				//return (int) (arg0.getWorkLoad() -this.workLoad);
+				
 			case 2:
 				return (this.number - arg0.getNumber());
 			
@@ -86,6 +92,8 @@ public class Machine implements Comparable<Machine>{
 		}
 		
 		if (thisSwap != otherSwap){
+			//System.out.print(thisSwap + ">" + otherSwap + " ");
+			
 			other.addTask(thisSwap);
 			other.removeTask(otherSwap);
 

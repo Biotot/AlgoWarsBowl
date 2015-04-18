@@ -97,7 +97,7 @@ public class AlgoWarsMain {
 			tradeFound = false;
 
 			//System.out.println(machines.get(0));
-			for (int y = machines.size()-1; y>machines.size()/2; y--){
+			for (int y = machines.size()-1; y>0; y--){
 				if (machines.get(0).tradeTasks(machines.get(y))){
 					tradeFound = true;
 					break;
@@ -106,7 +106,7 @@ public class AlgoWarsMain {
 			}
 		}
 		
-		//Machine.sortStyle = 2;//sort by machine number
+		Machine.sortStyle = 1;//sort by machine number
 		Collections.sort(machines);
 	}
 	
