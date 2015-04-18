@@ -14,10 +14,8 @@ public class AlgoWarsMain {
 	
 	
 	public static void main(String [] args){
-		
 		inputFile();
 		//randomSim();
-		
 	}
 	
 	public static void randomSim(){
@@ -25,15 +23,22 @@ public class AlgoWarsMain {
 		float averageDifference = 0;
 		float minDifference = Float.MAX_VALUE;
 		float maxDifference = Float.MIN_VALUE;
+		AlgoWarsMain biggest = null;
 		for (int x = 0; x<sims; x++){
 			AlgoWarsMain tommy = new AlgoWarsMain(true);
 			averageDifference += tommy.pDifference;
 			if (tommy.pDifference<minDifference) minDifference = tommy.pDifference;
-			if (tommy.pDifference>maxDifference) maxDifference = tommy.pDifference;
+			if (tommy.pDifference>maxDifference){
+				maxDifference = tommy.pDifference;
+				biggest = tommy;
+			}
 		}
 		averageDifference /= sims;
 		System.out.println("Average pDifference: " + averageDifference + "\tOver "+sims+" simulations");
 		System.out.println("Max pDifference: " + maxDifference + "\t Min pDifference " + minDifference);
+		if (biggest != null)
+			biggest.output(true);
+		
 	}
 	
 	public static void inputFile(){
@@ -65,7 +70,7 @@ public class AlgoWarsMain {
 	
 	
 	public void allocateTasks(){
-		//find the average
+		//Set up the initial stacks
 		Collections.sort(tasks);
 		Collections.sort(machines);
 		while (!tasks.isEmpty()){
@@ -79,9 +84,22 @@ public class AlgoWarsMain {
 			tasks.remove(tasks.size()-1);
 			best.addTask(task);
 		}
-		Machine.outputSort = true;
-		Collections.sort(machines);
 		
+		//refine the results
+		Machine.sortStyle = 1;//sort by work load
+		Collections.sort(machines);
+		for (int x = 0; x<machines.size()-2;x++){
+			
+			for (int y = machines.size()-1; y>x; y--){
+				Machine largest = machines.get(x);
+				Machine smallest = machines.get(y);
+				largest.delegateTasks(smallest);
+			}
+			
+		}
+		
+		Machine.sortStyle = 2;//sort by machine number
+		Collections.sort(machines);
 	}
 	
 	
@@ -101,19 +119,23 @@ public class AlgoWarsMain {
 	}
 	
 	public void generateRandomInput(){
-		int taskCount = 1000;
-		int machineCount = 50;
+
+		Random rand = new Random();
+		int taskCount = rand.nextInt(949)+50;
+		int machineCount = rand.nextInt(49)+1;
+		if (machineCount>taskCount){
+			machineCount = taskCount;
+		}
 		tasks = new ArrayList<Integer>();
 		machines = new ArrayList<Machine>();
-		Random rand = new Random();
+		
 		for (int x = 0; x<taskCount; x++){
 			tasks.add(rand.nextInt(9999)+1);
 		}
 		for (int x = 0; x<machineCount; x++){
 			machines.add(new Machine(rand.nextInt(19)+1, x));
 		}
-		
-		
+	
 	}
 	
 	public void loadFile() throws FileNotFoundException{
