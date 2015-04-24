@@ -81,7 +81,7 @@ public class Machine implements Comparable<Machine>{
 				float added = other.testLoad(taskDifference);
 				float removed = testRemoveLoad(taskDifference);
 				
-				if ((added < bestResult)&&(removed < bestResult)){
+				if ((added < removed)&&(removed < bestResult)){
 					
 					bestResult = (added > removed)? added : removed; 
 					thisSwap = currentTask;
@@ -92,7 +92,7 @@ public class Machine implements Comparable<Machine>{
 		}
 		
 		if (thisSwap != otherSwap){
-			//System.out.print(thisSwap + ">" + otherSwap + " ");
+			System.out.print(thisSwap + ">" + otherSwap + " ");
 			
 			other.addTask(thisSwap);
 			other.removeTask(otherSwap);

@@ -14,8 +14,8 @@ public class AlgoWarsMain {
 	
 	
 	public static void main(String [] args){
-		inputFile();
-		//randomSim();
+		//inputFile();
+		randomSim();
 	}
 	
 	public static void randomSim(){
@@ -97,7 +97,7 @@ public class AlgoWarsMain {
 			tradeFound = false;
 
 			//System.out.println(machines.get(0));
-			for (int y = machines.size()-1; y>0; y--){
+			for (int y = machines.size()-1; y>1; y--){
 				if (machines.get(0).tradeTasks(machines.get(y))){
 					tradeFound = true;
 					break;
